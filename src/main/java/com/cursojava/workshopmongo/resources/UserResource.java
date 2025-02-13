@@ -43,13 +43,13 @@ public class UserResource {
 	
 	// Método para inserir um usuário
 	
-		@RequestMapping(method=RequestMethod.POST)  // ou @PostMapping
-		public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
-			User obj = service.fromDTO(objDto);  // converte o UserDTO para User
-			obj = service.insert(obj);  // insere no banco de dados
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();  // pega a url do novo recurso inserido
-			return ResponseEntity.created(uri).build();  // retorna o código HTTP 201 
-		}
+	@RequestMapping(method=RequestMethod.POST)  // ou @PostMapping
+	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
+		User obj = service.fromDTO(objDto);  // converte o UserDTO para User
+		obj = service.insert(obj);  // insere no banco de dados
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();  // pega a url do novo recurso inserido
+		return ResponseEntity.created(uri).build();  // retorna o código HTTP 201 
+	}
 	
 	// Método para deletar o usuário por id
 	
@@ -57,6 +57,16 @@ public class UserResource {
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();  // retorna o código HTTP 204
+	}
+	
+	// Método para atualizar um usuário
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)  // ou @PostMapping
+	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
+		User obj = service.fromDTO(objDto);  // instancia um obj a partir de um objDTO que vem na requisição
+		obj.setId(id);  // para garantir que o objeto vai ter o mesmo id da requisição
+		obj = service.update(obj);  // insere no banco de dados
+		return ResponseEntity.noContent().build();
 	}
 	
 	
