@@ -49,8 +49,16 @@ public class UserResource {
 			obj = service.insert(obj);  // insere no banco de dados
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();  // pega a url do novo recurso inserido
 			return ResponseEntity.created(uri).build();  // retorna o código HTTP 201 
-		
 		}
+	
+	// Método para deletar o usuário por id
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)  // caminho: /users/{id}
+	public ResponseEntity<Void> delete(@PathVariable String id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();  // retorna o código HTTP 204
+	}
+	
 	
 }
    
