@@ -1,5 +1,6 @@
 package com.cursojava.workshopmongo.resources;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,29 @@ public class PostResource {
 	
 	// Método para buscar o post contendo um dado string no título
 	
-		@RequestMapping(value="/titlesearch", method=RequestMethod.GET)  // caminho: /users/{id}
-		public ResponseEntity<List<Post>> findByTitle(@RequestParam(value="text", defaultValue="") String text) {
-			text = URL.decodeParam(text);  // decodifica o texto
-			List<Post> list = service.findByTitle(text);
-			return ResponseEntity.ok().body(list);  
-		}
+	@RequestMapping(value="/titlesearch", method=RequestMethod.GET)  // caminho: /users/{id}
+	public ResponseEntity<List<Post>> findByTitle(@RequestParam(value="text", defaultValue="") String text) {
+		text = URL.decodeParam(text);  // decodifica o texto
+		List<Post> list = service.findByTitle(text);
+		return ResponseEntity.ok().body(list);  
+	}
+		
+	// Método para buscar posts contendo um dado string em qualquer lugar e em um dado intervalo de datas
+	
+	@RequestMapping(value="/fullsearch", method=RequestMethod.GET)  // caminho: /users/{id}
+	public ResponseEntity<List<Post>> fullSearch(
+			@RequestParam(value="text", defaultValue="") String text,
+			@RequestParam(value="minDate", defaultValue="") String minDate,
+			@RequestParam(value="MaxDate", defaultValue="") String maxDate
+			) {
+		text = URL.decodeParam(text);  // decodifica o texto
+		
+		Date min = URL.convertDate(minDate, new Date(0L));
+		Date max = URL.convertDate(maxDate, new Date());
+		
+		List<Post> list = service.fullSearch(text, min, max);
+		
+		return ResponseEntity.ok().body(list);  
+	}
 }
    
